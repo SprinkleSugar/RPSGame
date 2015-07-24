@@ -178,7 +178,7 @@ function main() {
       };
       player1.update(msDuration);
       player2.update(msDuration);
-      display.blit(defaultFont.render("ROCK PAPER SCISSORS", "#000000"), [300, 0]);
+      display.blit(defaultFont.render("ROCK PAPER SCISSORS", "#FF6600"), [300, 0]);
       display.blit(defaultFont.render("Player 1: ", "#000000"), [0, 240]);
       display.blit(defaultFont.render(player1.health, "#000000"), [170, 240]);
       display.blit(defaultFont.render("Controls: W A S D", "#000000"), [0, 280]);
@@ -204,3 +204,6 @@ function main() {
 };
 gamejs.preload(['sprites_changed.png']);
 gamejs.ready(main);
+
+//var audio = new Audio('Kalimba.mp3');
+//audio.play();
