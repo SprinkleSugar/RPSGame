@@ -26,33 +26,35 @@ Player.prototype.changeForm = function(index) {
 Player.registerHit = function(player1, player2){
   player1Index = player1.form.index;
   player2Index = player2.form.index;
-  if(player1Index === 0){
-    if (player2Index === 1) {
+  if (player1Index !== player2Index) {
+    if(player1Index === 0){
+      if (player2Index === 1) {
+        player1.hit = true;
+      }else if (player2Index === 2) {
+        player2.hit = true;
+      };
+    }else if (player1Index === 1){
+      if (player2Index === 0) {
+        player2.hit = true;
+      }else if (player2Index === 2) {
+        player1.hit = true;
+      };
+    }else if (player1Index === 2){
+      if (player2Index === 0) {
+        player1.hit = true;
+      }else if (player2Index === 1) {
+        player2.hit = true;
+      };
+    }else{
       player1.hit = true;
-    }else if (player2Index === 2) {
+    }
+    if(player2Index === 3){
       player2.hit = true;
+    }
+    if(player2Index !== player1Index || player1Index === 3){
+      timeSinceHit = 0;
     };
-  }else if (player1Index === 1){
-    if (player2Index === 0) {
-      player2.hit = true;
-    }else if (player2Index === 2) {
-      player1.hit = true;
-    };
-  }else if (player1Index === 2){
-    if (player2Index === 0) {
-      player1.hit = true;
-    }else if (player2Index === 1) {
-      player2.hit = true;
-    };
-  }else{
-    player1.hit = true;
   }
-  if(player2Index === 3){
-    player2.hit = true;
-  }
-  if(player2Index !== player1Index || player1Index === 3){
-    timeSinceHit = 0;
-  };
 };
 Player.prototype.update = function(msDuration) {
   if (this.mask & formChange) {
@@ -67,10 +69,14 @@ Player.prototype.update = function(msDuration) {
       }*/
   }
   if(this.mask & up){
-    this.yPlacement -= 14;
+    if (this.yPlacement > 0) {
+      this.yPlacement -= 14;
+    }
   }
   if(this.mask & down){
-    this.yPlacement += 14;
+    if (this.yPlacement < 470) {
+      this.yPlacement += 14;
+    }
   };
   if(this.mask & left){
     if(this.placement > 0){
@@ -194,7 +200,7 @@ function main() {
       };
       player1.update(msDuration);
       player2.update(msDuration);
-      display.blit(defaultFont.render("ROCK PAPER SCISSORS", "#000000"), [300, 0]);
+      display.blit(defaultFont.render("ROCK PAPER SCISSORS", "#FF6600"), [300, 0]);
       display.blit(defaultFont.render("Player 1: ", "#000000"), [0, 240]);
       display.blit(defaultFont.render(player1.health, "#000000"), [170, 240]);
       display.blit(defaultFont.render("Controls: W A S D SPACE", "#000000"), [0, 280]);
@@ -206,6 +212,7 @@ function main() {
       if(player1.health === 0 || player2.health === 0){
         activeGame = false;
         if (player1.health === 0){
+          var inputBox =
           display.blit(defaultFont.render("Player 1 Defeated", "#000000"), [0, 320]);
         }
         if (player2.health === 0){
@@ -220,3 +227,6 @@ function main() {
 };
 gamejs.preload(['fireicewater.png']);
 gamejs.ready(main);
+
+//var audio = new Audio('Kalimba.mp3');
+//audio.play();
