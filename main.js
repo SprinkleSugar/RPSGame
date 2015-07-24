@@ -87,7 +87,7 @@ Player.prototype.draw = function(display) {
 
 function main() {
   var display = gamejs.display.setMode([screenWidth, screenHeight]);
-  var sprites = gamejs.image.load('sprites_big.png');
+  var sprites = gamejs.image.load('sprites_changed.png');
   var surfaceCache = [];
   var maskCache = [];
   for (var i = 0; i < numSprites; i++){
@@ -202,5 +202,5 @@ function main() {
   var player2 = new Player(1000, 3);
   gamejs.time.fpsCallback(gameTick, this, 60);
 };
-gamejs.preload(['sprites_big.png']);
+gamejs.preload(['sprites_changed.png']);
 gamejs.ready(main);
