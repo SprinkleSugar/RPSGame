@@ -11,6 +11,10 @@ var timeBetweenHits = 300;
 var timeSinceHit = 0;
 var activeGame = true;
 var defaultFont = new font.Font("40px Arial");
+var bestTwoOutOfThree = false;
+var player1Score = 0;
+var player1;
+var player2;
 
 function Player(placement, formIndex){
   this.placement = placement;
@@ -191,7 +195,7 @@ function main() {
       });
       display.clear();
       if(timeSinceHit > timeBetweenHits){
-        var hasMaskOverlap = player1.form.mask.overlap(player2.form.mask, [player1.placement - player2.placement, 0]);
+        var hasMaskOverlap = player1.form.mask.overlap(player2.form.mask, [player1.placement - player2.placement, player1.yPlacement - player2.yPlacement]);
         if (hasMaskOverlap) {
           Player.registerHit(player1, player2);
         };
@@ -214,19 +218,45 @@ function main() {
       if(player1.health === 0 || player2.health === 0){
         activeGame = false;
         if (player1.health === 0){
-          var inputBox =
           display.blit(defaultFont.render("Player 1 Defeated", "#000000"), [0, 320]);
+          player1Score--;
         }
         if (player2.health === 0){
           display.blit(defaultFont.render("Player 2 Defeated", "#000000"), [600, 320]);
+          player1Score++;
+        }
+        if (!bestTwoOutOfThree) {
+          var confirmMoreGame = confirm("Best two out of three?");
+          if (confirmMoreGame) {
+            restart();
+            bestTwoOutOfThree = true;
+          }
+        } else if ((player1Score > -2) && (player1Score < 2)) {
+          var confirmContinue = confirm("Continue?");
+          if (confirmContinue) {
+            restart();
+          }
+        } else {
+          var confirmExtraGames = confirm("One player died. More game?");
+          if (confirmExtraGames) {
+            location.reload();
+          }
         }
       };
     };
   };
-  var player1 = new Player(0, 3);
-  var player2 = new Player(1000, 3);
+  player1 = new Player(0, 3);
+  player2 = new Player(1000, 3);
   gamejs.time.fpsCallback(gameTick, this, 60);
 };
+
+function restart() {
+  activeGame = true;
+  player1 = new Player(0, 3);
+  player2 = new Player(1000, 3);
+  console.log("restart");
+}
+
 gamejs.preload(['fireicewater.png']);
 gamejs.ready(main);
 
